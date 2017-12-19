@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  toffees.glucose:
+    image: toffees.glucose
+    build:
+      context: ./Biometric/Source/Toffees.Glucose
+      dockerfile: Dockerfile
