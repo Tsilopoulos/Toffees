@@ -5,10 +5,10 @@ EXPOSE 80
 FROM microsoft/aspnetcore-build:2.0 AS build
 WORKDIR /src
 COPY *.sln ./
-COPY Biometric/Source/Toffees.Glucose/Toffees.Glucose.csproj Biometric/Source/Toffees.Glucose/
+COPY Web/Source/Toffees.Web/Toffees.Web.csproj Web/Source/Toffees.Web/
 RUN dotnet restore
 COPY . .
-WORKDIR /src/Biometric/Source/Toffees.Glucose
+WORKDIR /src/Web/Source/Toffees.Web
 RUN dotnet build -c Release -o /app
 
 FROM build AS publish
@@ -17,4 +17,4 @@ RUN dotnet publish -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Toffees.Glucose.dll"]
+ENTRYPOINT ["dotnet", "Toffees.Web.dll"]

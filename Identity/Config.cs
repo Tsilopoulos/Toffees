@@ -29,7 +29,7 @@ namespace Toffees.Identity
                     // secret for using introspection endpoint
                     ApiSecrets =
                     {
-                        new Secret("angularSecret".Sha256())
+                        new Secret("glucoseSecret".Sha256())
                     },
                     // include the following using claims in access token (in addition to subject id)
                     UserClaims =
@@ -106,19 +106,23 @@ namespace Toffees.Identity
                     },
                     RedirectUris =
                     {
-                        "http://localhost:5001/index.html",
-                        "http://localhost:5001/callback.html",
-                        "http://localhost:5001/silent.html",
-                        "http://localhost:5001/popup.html",
+                        "http://localhost:5001/index.html"
                     },
-                    PostLogoutRedirectUris = { "http://localhost:5001/index.html" },
-                    AllowedCorsOrigins = { "http://localhost:5001" },
+                    PostLogoutRedirectUris =
+                    {
+                        "http://localhost:5001"
+                    },
+                    AllowedCorsOrigins =
+                    {
+                        "http://localhost:5001"
+                    },
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "biometric_api.full_access"
-                    }
+                    },
+                    AllowOfflineAccess = true
                 },
                 
                 // Postman API tool client
@@ -127,7 +131,6 @@ namespace Toffees.Identity
                     ClientId = "postman",
                     ClientName = "Postman Windows Client dev tests",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    Enabled = true,
                     ClientSecrets = new List<Secret>
                     {
                         new Secret("secret".Sha256())

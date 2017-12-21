@@ -13,7 +13,7 @@ namespace Toffees.Web
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://localhost:8080")
+                .UseUrls("http://localhost:5002")
                 .Build();
     }
 }

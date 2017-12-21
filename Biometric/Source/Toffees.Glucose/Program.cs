@@ -15,7 +15,6 @@ namespace Toffees.Glucose
             WebHost.CreateDefaultBuilder(args)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseKestrel()
-                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
     }

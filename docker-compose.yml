@@ -1,8 +1,22 @@
 version: '3'
-
 services:
+  toffees.identity:
+    image: toffees.identity
+    build:
+      context: .
+      dockerfile: Identity/Dockerfile
+
+
   toffees.glucose:
     image: toffees.glucose
     build:
-      context: ./Biometric/Source/Toffees.Glucose
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Biometric/Source/Toffees.Glucose/Dockerfile
+
+
+  toffees.web:
+    image: toffees.web
+    build:
+      context: .
+      dockerfile: Web/Source/Toffees.Web/Dockerfile
+

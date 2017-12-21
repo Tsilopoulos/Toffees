@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,15 +7,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
-using IdentityModel.Client;
 using IdentityServer4.AccessTokenValidation;
 using LibOwin;
-using Microsoft.AspNetCore.DataProtection;
+using Microsoft.IdentityModel.Tokens;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Owin;
@@ -47,7 +44,7 @@ namespace Toffees.Glucose
         protected override void RequestStartup(TinyIoCContainer container, IPipelines pipelines, NancyContext context)
         {
             base.RequestStartup(container, pipelines, context);
-            //var correlationToken = context.GetOwinEnvironment()["correlationToken"] as string;
+            var correlationToken = context.GetOwinEnvironment()["correlationToken"] as string;
             //context.CurrentUser = context.GetOwinEnvironment()["pos-end-user"] as ClaimsPrincipal;
             //container.Register<IHttpClientFactory>(new HttpClientFactory(correlationToken));
         }
@@ -59,7 +56,8 @@ namespace Toffees.Glucose
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", true)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -79,7 +77,7 @@ namespace Toffees.Glucose
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = "http://localhost:5000";
-                    options.ApiSecret = "angularSecret";
+                    options.ApiSecret = "glucoseSecret";
                     options.InboundJwtClaimTypeMap = new Dictionary<string, string>();
                     options.EnableCaching = false;
                     options.ApiName = "biometric_api";
@@ -112,39 +110,39 @@ namespace Toffees.Glucose
 
             app.UseOwin(buildFunc =>
             {
-                //buildFunc(next => env =>
-                //{
-                    //var ctx = new OwinContext(env);
-                    //if (!ctx.Request.Headers.ContainsKey("pos-end-user")) return next(env);
-                    //var tokenHandler = new JwtSecurityTokenHandler();
-                    //var userPrincipal =
-                    //    tokenHandler.ValidateToken(ctx.Request.Headers["pos-end-user"],
-                    //        new TokenValidationParameters(),
-                    //        out _);
-                    //ctx.Set("pos-end-user", userPrincipal);
-                    //return next(env);
-                //});
-                //buildFunc(next => env =>
-                //{
-                //    var ctx = new OwinContext(env);
-                //    var principal = ctx.Request.User;
-                //    if (principal?.HasClaim("scope", "biometric_api.full_access") ?? false)
-                //    {
-                //        return next(env);
-                //    }
-                //    ctx.Response.StatusCode = 403;
-                //    return Task.FromResult(0);
-                //});
-                //buildFunc(next => env =>
-                //{
-                //    var ctx = new OwinContext(env);
-                //    var idToken = ctx.Request.User?.FindFirst("id_token");
-                //    if (idToken != null)
-                //    {
-                //        ctx.Set("pos-end-user-token", idToken);
-                //    }
-                //    return next(env);
-                //});
+                buildFunc(next => env =>
+                {
+                    var ctx = new OwinContext(env);
+                    if (!ctx.Request.Headers.ContainsKey("pos-end-user")) return next(env);
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var userPrincipal =
+                        tokenHandler.ValidateToken(ctx.Request.Headers["pos-end-user"],
+                            new TokenValidationParameters(),
+                            out _);
+                    ctx.Set("pos-end-user", userPrincipal);
+                    return next(env);
+                });
+                buildFunc(next => env =>
+                {
+                    var ctx = new OwinContext(env);
+                    var principal = ctx.Request.User;
+                    if (principal?.HasClaim("scope", "biometric_api.full_access") ?? false)
+                    {
+                        return next(env);
+                    }
+                    ctx.Response.StatusCode = 403;
+                    return Task.FromResult(0);
+                });
+                buildFunc(next => env =>
+                {
+                    var ctx = new OwinContext(env);
+                    var idToken = ctx.Request.User?.FindFirst("id_token");
+                    if (idToken != null)
+                    {
+                        ctx.Set("pos-end-user-token", idToken);
+                    }
+                    return next(env);
+                });
 
                 buildFunc(next => GlobalErrorLogging.Middleware(next, log));
                 buildFunc(CorrelationToken.Middleware);
