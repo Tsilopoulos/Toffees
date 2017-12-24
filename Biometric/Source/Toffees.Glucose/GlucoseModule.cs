@@ -10,7 +10,7 @@ namespace Toffees.Glucose
 {
     public sealed class GlucoseModule : NancyModule
     {
-        public GlucoseModule(IGlucoseRepository glucosesRepository) : base("/biometric/glucose")
+        public GlucoseModule(IGlucoseRepository glucosesRepository) : base("/api/biometric/glucose")
         {
             Get("/{userid}", async parameters =>
             {
