@@ -6,16 +6,17 @@ import { Http } from "@angular/http";
     templateUrl: "./fetchdata.component.html"
 })
 export class FetchDataComponent {
-    public forecasts: IWeatherForecast[];
+    public glucoses: IGlucose[];
 
     constructor(http: Http, @Inject("BIOMETRIC_URL") baseUrl: string) {
         http.get(baseUrl + "biometric/glucose/" + 1).subscribe(result => {
-            this.forecasts = result.json() as IWeatherForecast[];
+            this.glucoses = result.json() as IGlucose[];
         }, error => console.error(error));
+        
     }
 }
 
-interface IWeatherForecast {
+interface IGlucose {
     dateFormatted: string;
     temperatureC: number;
     temperatureF: number;

@@ -92,13 +92,13 @@ namespace Toffees.Identity
                     }
                 },
 
-                // SPA client using implicit flow
+                // SPA client using client credential flow
                 new Client
                 {
                     ClientId = "angular",
                     ClientName = "Angular SPA Client",
-                    ClientUri = "http://localhost:5001",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientUri = "http://localhost:5002",
+                    AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
                     ClientSecrets = new List<Secret>
                     {
@@ -106,15 +106,15 @@ namespace Toffees.Identity
                     },
                     RedirectUris =
                     {
-                        "http://localhost:5001/index.html"
+                        "http://localhost:5002/home"
                     },
                     PostLogoutRedirectUris =
                     {
-                        "http://localhost:5001"
+                        "http://localhost:5002"
                     },
                     AllowedCorsOrigins =
                     {
-                        "http://localhost:5001"
+                        "http://localhost:5002"
                     },
                     AllowedScopes =
                     {

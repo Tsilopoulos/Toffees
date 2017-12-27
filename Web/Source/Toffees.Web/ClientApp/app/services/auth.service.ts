@@ -82,18 +82,17 @@
 
 import { Response, RequestOptions, ConnectionBackend } from "@angular/http";
 import { Observable } from "rxjs/Observable";
-import { HttpAuthInterceptor, InterceptorConfig } from "../interceptors/auth.interceptor";
 
-export class HttpAuth extends HttpAuthInterceptor {
+export class AuthenticationService {
 
     // In production code do not put your API keys here make sure they are obtained some other way.
     // perhaps a env variables.
     private API_ACCESS_KEY = "...";
     private API_ACCESS_SECRET = "...";
 
-    constructor(backend: ConnectionBackend, defaultOptions: RequestOptions) {
-        super(backend, defaultOptions, new InterceptorConfig({ noTokenError: true }));
-    }
+    // constructor(backend: ConnectionBackend, defaultOptions: RequestOptions) {
+    //     super(backend, defaultOptions, new InterceptorConfig({ noTokenError: true }));
+    // }
 
     protected getToken(): string {
         return localStorage.getItem("id_token") as string;
@@ -103,10 +102,10 @@ export class HttpAuth extends HttpAuthInterceptor {
         return localStorage.setItem("id_token", token);
     }
 
-    protected refreshToken(): Observable<Response> {
-        return super.post("http://localhost:5000/connect/token", {
-            access_key_id: this.API_ACCESS_KEY,
-            access_key_secret: this.API_ACCESS_SECRET
-        });
-    }
+    // protected refreshToken(): Observable<Response> {
+    //     return super.post("http://localhost:5000/connect/token", {
+    //         access_key_id: this.API_ACCESS_KEY,
+    //         access_key_secret: this.API_ACCESS_SECRET
+    //     });
+    // }
 }

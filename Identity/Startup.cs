@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.IO;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -24,8 +26,8 @@ namespace Toffees.Identity
 
             //if (env.IsDevelopment())
             //{
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                //builder.AddUserSecrets();
+            //    //For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+            //    builder.AddUserSecrets<ConfigurationBuilder>();
             //}
 
             builder.AddEnvironmentVariables();
@@ -45,35 +47,36 @@ namespace Toffees.Identity
             services.AddMvc();
 
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-
+            
             services.AddIdentityServer(options =>
-            {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
-            })
-            .AddDeveloperSigningCredential()
-            .AddAspNetIdentity<ApplicationUser>()
-            .AddInMemoryIdentityResources(Config.GetIdentityResources())
-            .AddInMemoryApiResources(Config.GetApis())
-            .AddInMemoryClients(Config.GetClients())
-            .AddConfigurationStore(options =>
-            {
-                options.ConfigureDbContext = builder =>
-                    builder.UseSqlServer(Configuration.GetConnectionString("IdentityServerContext"),
-                        sql => sql.MigrationsAssembly(migrationsAssembly));
-            })
-            // this adds the operational data from DB (codes, tokens, consents)
-            .AddOperationalStore(options =>
-            {
-                options.ConfigureDbContext = builder =>
-                    builder.UseSqlServer(Configuration.GetConnectionString("IdentityServerContext"),
-                        sql => sql.MigrationsAssembly(migrationsAssembly));
+                {
+                    options.Events.RaiseErrorEvents = true;
+                    options.Events.RaiseInformationEvents = true;
+                    options.Events.RaiseFailureEvents = true;
+                    options.Events.RaiseSuccessEvents = true;
+                })
+                .AddSigningCredential(new X509Certificate2(Path.Combine(Directory.GetCurrentDirectory(), "IdentityServer4Auth.pfx")))
+                .AddJwtBearerClientAuthentication()
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiResources(Config.GetApis())
+                .AddInMemoryClients(Config.GetClients())
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = builder =>
+                        builder.UseSqlServer(Configuration.GetConnectionString("IdentityServerContext"),
+                            sql => sql.MigrationsAssembly(migrationsAssembly));
+                })
+                // this adds the operational data from DB (codes, tokens, consents)
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = builder =>
+                        builder.UseSqlServer(Configuration.GetConnectionString("IdentityServerContext"),
+                            sql => sql.MigrationsAssembly(migrationsAssembly));
 
-                options.EnableTokenCleanup = true;
-                options.TokenCleanupInterval = 30;
-            });
+                    options.EnableTokenCleanup = false;
+                    //options.TokenCleanupInterval = 30;
+                });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -94,7 +97,7 @@ namespace Toffees.Identity
             }
 
             app.UseStaticFiles();
-            app.UseAuthentication();
+            //app.UseAuthentication();
             app.UseIdentityServer();
             app.UseMvcWithDefaultRoute();
         }

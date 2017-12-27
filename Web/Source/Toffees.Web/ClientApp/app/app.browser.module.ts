@@ -2,8 +2,8 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { AppModuleShared } from "./app.shared.module";
 import { AppComponent } from "./components/app/app.component";
-import { HttpAuth } from "./services/auth.service";
 import { Http, ConnectionBackend, XHRBackend, RequestOptions } from "@angular/http";
+import { httpFactory } from "./factories/http.factory";
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -18,7 +18,7 @@ import { Http, ConnectionBackend, XHRBackend, RequestOptions } from "@angular/ht
         },
         {
             provide: Http,
-            useFactory: getHttpAuth,
+            useFactory: httpFactory,
             deps: [XHRBackend, RequestOptions]
         }
     ]
@@ -26,9 +26,9 @@ import { Http, ConnectionBackend, XHRBackend, RequestOptions } from "@angular/ht
 export class AppModule {
 }
 
-export function getHttpAuth(backend: ConnectionBackend, defaultOptions: RequestOptions) {
-    return new HttpAuth(backend, defaultOptions);
-}
+// export function getHttpAuth(backend: ConnectionBackend, defaultOptions: RequestOptions) {
+//     return new HttpAuth(backend, defaultOptions);
+// }
 
 export function getBaseUrl() {
     return "http://localhost:5001/";

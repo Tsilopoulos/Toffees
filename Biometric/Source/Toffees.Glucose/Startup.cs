@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using IdentityModel;
 using IdentityServer4.AccessTokenValidation;
 using LibOwin;
 using Microsoft.IdentityModel.Tokens;
@@ -68,19 +72,25 @@ namespace Toffees.Glucose
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            var dbConnString = Configuration.GetConnectionString("GlucoseDbContext");
+            //services
+            //    .AddMvcCore()
+            //    .AddJsonFormatters()
+            //    .AddAuthorization();
+
             services.AddEntityFrameworkSqlServer()
-                .AddDbContext<GlucoseDbContext>(options => options.UseSqlServer(dbConnString));
+                .AddDbContext<GlucoseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("GlucoseDbContext")));
             services.AddTransient(provider => UrlEncoder.Default);
             services.AddCors();
+            services.AddDistributedMemoryCache();
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
+                    options.RequireHttpsMetadata = false;
                     options.Authority = "http://localhost:5000";
-                    options.ApiSecret = "glucoseSecret";
-                    options.InboundJwtClaimTypeMap = new Dictionary<string, string>();
-                    options.EnableCaching = false;
                     options.ApiName = "biometric_api";
+                    options.ApiSecret = "glucoseSecret";
+                    //options.InboundJwtClaimTypeMap = new Dictionary<string, string>();
+                    options.EnableCaching = false;
                     options.Events = new JwtBearerEvents
                     {
                         OnAuthenticationFailed = c =>
@@ -99,25 +109,35 @@ namespace Toffees.Glucose
         {
             loggerFactory.AddConsole(LogLevel.Trace);
             loggerFactory.AddDebug(LogLevel.Trace);
-
             var log = ConfigureLogger();
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidAudience = "http://localhost:5000/resources",
+                IssuerSigningKey = new X509SecurityKey(new X509Certificate2(Path.Combine(Directory.GetCurrentDirectory(), "IdentityServer4Auth.pfx"))),
+                ValidIssuer = "http://localhost:5000",
+                RequireExpirationTime = true
+            };
 
             app.UseCors(builder =>
                 builder
                     .AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader());
-
+            app.UseAuthentication();
+            //app.UseMvc();
             app.UseOwin(buildFunc =>
             {
                 buildFunc(next => env =>
                 {
                     var ctx = new OwinContext(env);
-                    if (!ctx.Request.Headers.ContainsKey("pos-end-user")) return next(env);
+                    //if (!ctx.Request.Headers.ContainsKey("pos-end-user")) return next(env);
                     var tokenHandler = new JwtSecurityTokenHandler();
+                    var authToken = ctx.Request.Headers["Authorization"].Substring(7);
+                    
                     var userPrincipal =
-                        tokenHandler.ValidateToken(ctx.Request.Headers["pos-end-user"],
-                            new TokenValidationParameters(),
+                        tokenHandler.ValidateToken(authToken,
+                            validationParameters,
                             out _);
                     ctx.Set("pos-end-user", userPrincipal);
                     return next(env);
