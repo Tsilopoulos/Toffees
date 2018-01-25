@@ -11,6 +11,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -91,7 +92,7 @@ namespace Toffees.Identity.Quickstart.Account
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, true);
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByNameAsync(model.Username);
@@ -114,6 +115,42 @@ namespace Toffees.Identity.Quickstart.Account
             // something went wrong, show form with error
             var vm = await _account.BuildLoginViewModelAsync(model);
             return View(vm);
+        }
+
+        // GET: /Account/Register
+        [HttpGet, AllowAnonymous]
+        public IActionResult Register(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        //
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (!ModelState.IsValid) return View(model);
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
+                // Send an email with this link
+                //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                //var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+                //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+                await _signInManager.SignInAsync(user, false);
+                return RedirectToLocal(returnUrl);
+            }
+            AddErrors(result);
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         /// <summary>
@@ -327,5 +364,26 @@ namespace Toffees.Identity.Quickstart.Account
 
             return View("LoggedOut", vm);
         }
+
+        #region Helpers
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction(nameof(AccountController.Login), "Login");
+        }
+
+        #endregion
     }
 }

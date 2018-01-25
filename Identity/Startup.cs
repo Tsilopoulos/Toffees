@@ -21,8 +21,8 @@ namespace Toffees.Identity
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true);
 
             //if (env.IsDevelopment())
             //{
@@ -43,7 +43,7 @@ namespace Toffees.Identity
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            services.AddCors();
             services.AddMvc();
 
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
@@ -58,24 +58,23 @@ namespace Toffees.Identity
                 .AddSigningCredential(new X509Certificate2(Path.Combine(Directory.GetCurrentDirectory(), "IdentityServer4Auth.pfx")))
                 .AddJwtBearerClientAuthentication()
                 .AddAspNetIdentity<ApplicationUser>()
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryApiResources(Config.GetApis())
-                .AddInMemoryClients(Config.GetClients())
+                //.AddInMemoryIdentityResources(Config.GetIdentityResources())
+                //.AddInMemoryApiResources(Config.GetApis())
+                //.AddInMemoryClients(Config.GetClients())
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = builder =>
                         builder.UseSqlServer(Configuration.GetConnectionString("IdentityServerContext"),
                             sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
-                // this adds the operational data from DB (codes, tokens, consents)
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = builder =>
                         builder.UseSqlServer(Configuration.GetConnectionString("IdentityServerContext"),
                             sql => sql.MigrationsAssembly(migrationsAssembly));
 
-                    options.EnableTokenCleanup = false;
-                    //options.TokenCleanupInterval = 30;
+                    options.EnableTokenCleanup = true;
+                    options.TokenCleanupInterval = 30;
                 });
         }
 
@@ -96,8 +95,12 @@ namespace Toffees.Identity
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseCors(builder =>
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
             app.UseStaticFiles();
-            //app.UseAuthentication();
             app.UseIdentityServer();
             app.UseMvcWithDefaultRoute();
         }
@@ -106,36 +109,36 @@ namespace Toffees.Identity
         //{
         //    using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
         //    {
-        //        serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+                //erviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
-        //        var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-        //        context.Database.Migrate();
-        //        if (!context.Clients.Any())
-        //        {
-        //            foreach (var client in Config.GetClients())
-        //            {
-        //                context.Clients.Add(client.ToEntity());
-        //            }
-        //            context.SaveChanges();
-        //        }
+                //var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                //context.Database.Migrate();
+                //if (!context.Clients.Any())
+                //{
+                //    foreach (var client in Config.GetClients())
+                //    {
+                //        context.Clients.Add(client.ToEntity());
+                //    }
+                //    context.SaveChanges();
+                //}
 
-        //        if (!context.IdentityResources.Any())
-        //        {
-        //            foreach (var resource in Config.GetIdentityResources())
-        //            {
-        //                context.IdentityResources.Add(resource.ToEntity());
-        //            }
-        //            context.SaveChanges();
-        //        }
+                //if (!context.IdentityResources.Any())
+                //{
+                //    foreach (var resource in Config.GetIdentityResources())
+                //    {
+                //        context.IdentityResources.Add(resource.ToEntity());
+                //    }
+                //    context.SaveChanges();
+                //}
 
-        //        if (context.ApiResources.Any()) return;
-        //        {
-        //            foreach (var resource in Config.GetApis())
-        //            {
-        //                context.ApiResources.Add(resource.ToEntity());
-        //            }
-        //            context.SaveChanges();
-        //        }
+                //if (context.ApiResources.Any()) return;
+                //{
+                //    foreach (var resource in Config.GetApis())
+                //    {
+                //        context.ApiResources.Add(resource.ToEntity());
+                //    }
+                //    context.SaveChanges();
+                //}
         //    }
         //}
     }

@@ -58,47 +58,14 @@ namespace Toffees.Identity
         {
             return new[]
             {
-                // client credentials flow client
-                new Client
-                {
-                    ClientId = "client",
-                    ClientName = "Client Credentials Client",
-
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
-
-                    AllowedScopes = { "biometric_api.full_access" }
-                },
-
-                // MVC client using hybrid flow
-                new Client
-                {
-                    ClientId = "mvc",
-                    ClientName = "ASP.NET Core MVC Client",
-
-                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
-                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
-
-                    RedirectUris = { "http://localhost:5001/signin-oidc" },
-                    FrontChannelLogoutUri = "http://localhost:5001/signout-oidc",
-                    PostLogoutRedirectUris = { "http://localhost:5001/signout-callback-oidc" },
-
-                    AllowOfflineAccess = true,
-                    AllowedScopes =
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "biometric_api.full_access"
-                    }
-                },
-
                 // SPA client using client credential flow
                 new Client
                 {
                     ClientId = "angular",
                     ClientName = "Angular SPA Client",
                     ClientUri = "http://localhost:5002",
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    RequireConsent = false,
                     AllowAccessTokensViaBrowser = true,
                     ClientSecrets = new List<Secret>
                     {
