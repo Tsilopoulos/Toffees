@@ -10,7 +10,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ApiResources",
+                "ApiResources",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -26,7 +26,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "Clients",
+                "Clients",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -72,7 +72,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "IdentityResources",
+                "IdentityResources",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -91,7 +91,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApiClaims",
+                "ApiClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -103,7 +103,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ApiClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApiClaims_ApiResources_ApiResourceId",
+                        "FK_ApiClaims_ApiResources_ApiResourceId",
                         column: x => x.ApiResourceId,
                         principalTable: "ApiResources",
                         principalColumn: "Id",
@@ -111,7 +111,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApiScopes",
+                "ApiScopes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -128,7 +128,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ApiScopes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApiScopes_ApiResources_ApiResourceId",
+                        "FK_ApiScopes_ApiResources_ApiResourceId",
                         column: x => x.ApiResourceId,
                         principalTable: "ApiResources",
                         principalColumn: "Id",
@@ -136,7 +136,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApiSecrets",
+                "ApiSecrets",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -151,7 +151,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ApiSecrets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApiSecrets_ApiResources_ApiResourceId",
+                        "FK_ApiSecrets_ApiResources_ApiResourceId",
                         column: x => x.ApiResourceId,
                         principalTable: "ApiResources",
                         principalColumn: "Id",
@@ -159,7 +159,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientClaims",
+                "ClientClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -172,7 +172,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientClaims_Clients_ClientId",
+                        "FK_ClientClaims_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -180,7 +180,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientCorsOrigins",
+                "ClientCorsOrigins",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -192,7 +192,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientCorsOrigins", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientCorsOrigins_Clients_ClientId",
+                        "FK_ClientCorsOrigins_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -200,7 +200,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientGrantTypes",
+                "ClientGrantTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -212,7 +212,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientGrantTypes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientGrantTypes_Clients_ClientId",
+                        "FK_ClientGrantTypes_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -220,7 +220,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientIdPRestrictions",
+                "ClientIdPRestrictions",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -232,7 +232,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientIdPRestrictions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientIdPRestrictions_Clients_ClientId",
+                        "FK_ClientIdPRestrictions_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -240,7 +240,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientPostLogoutRedirectUris",
+                "ClientPostLogoutRedirectUris",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -252,7 +252,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientPostLogoutRedirectUris", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientPostLogoutRedirectUris_Clients_ClientId",
+                        "FK_ClientPostLogoutRedirectUris_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -260,7 +260,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientProperties",
+                "ClientProperties",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -273,7 +273,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientProperties", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientProperties_Clients_ClientId",
+                        "FK_ClientProperties_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -281,7 +281,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientRedirectUris",
+                "ClientRedirectUris",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -293,7 +293,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientRedirectUris", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientRedirectUris_Clients_ClientId",
+                        "FK_ClientRedirectUris_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -301,7 +301,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientScopes",
+                "ClientScopes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -313,7 +313,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientScopes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientScopes_Clients_ClientId",
+                        "FK_ClientScopes_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -321,7 +321,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientSecrets",
+                "ClientSecrets",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -336,7 +336,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientSecrets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientSecrets_Clients_ClientId",
+                        "FK_ClientSecrets_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -344,7 +344,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "IdentityClaims",
+                "IdentityClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -356,7 +356,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_IdentityClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_IdentityClaims_IdentityResources_IdentityResourceId",
+                        "FK_IdentityClaims_IdentityResources_IdentityResourceId",
                         column: x => x.IdentityResourceId,
                         principalTable: "IdentityResources",
                         principalColumn: "Id",
@@ -364,7 +364,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApiScopeClaims",
+                "ApiScopeClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -376,7 +376,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ApiScopeClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApiScopeClaims_ApiScopes_ApiScopeId",
+                        "FK_ApiScopeClaims_ApiScopes_ApiScopeId",
                         column: x => x.ApiScopeId,
                         principalTable: "ApiScopes",
                         principalColumn: "Id",
@@ -384,95 +384,95 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiClaims_ApiResourceId",
+                "IX_ApiClaims_ApiResourceId",
                 table: "ApiClaims",
                 column: "ApiResourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiResources_Name",
+                "IX_ApiResources_Name",
                 table: "ApiResources",
                 column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiScopeClaims_ApiScopeId",
+                "IX_ApiScopeClaims_ApiScopeId",
                 table: "ApiScopeClaims",
                 column: "ApiScopeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiScopes_ApiResourceId",
+                "IX_ApiScopes_ApiResourceId",
                 table: "ApiScopes",
                 column: "ApiResourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiScopes_Name",
+                "IX_ApiScopes_Name",
                 table: "ApiScopes",
                 column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiSecrets_ApiResourceId",
+                "IX_ApiSecrets_ApiResourceId",
                 table: "ApiSecrets",
                 column: "ApiResourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientClaims_ClientId",
+                "IX_ClientClaims_ClientId",
                 table: "ClientClaims",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientCorsOrigins_ClientId",
+                "IX_ClientCorsOrigins_ClientId",
                 table: "ClientCorsOrigins",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientGrantTypes_ClientId",
+                "IX_ClientGrantTypes_ClientId",
                 table: "ClientGrantTypes",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientIdPRestrictions_ClientId",
+                "IX_ClientIdPRestrictions_ClientId",
                 table: "ClientIdPRestrictions",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientPostLogoutRedirectUris_ClientId",
+                "IX_ClientPostLogoutRedirectUris_ClientId",
                 table: "ClientPostLogoutRedirectUris",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientProperties_ClientId",
+                "IX_ClientProperties_ClientId",
                 table: "ClientProperties",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientRedirectUris_ClientId",
+                "IX_ClientRedirectUris_ClientId",
                 table: "ClientRedirectUris",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clients_ClientId",
+                "IX_Clients_ClientId",
                 table: "Clients",
                 column: "ClientId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientScopes_ClientId",
+                "IX_ClientScopes_ClientId",
                 table: "ClientScopes",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientSecrets_ClientId",
+                "IX_ClientSecrets_ClientId",
                 table: "ClientSecrets",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityClaims_IdentityResourceId",
+                "IX_IdentityClaims_IdentityResourceId",
                 table: "IdentityClaims",
                 column: "IdentityResourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityResources_Name",
+                "IX_IdentityResources_Name",
                 table: "IdentityResources",
                 column: "Name",
                 unique: true);
@@ -481,55 +481,55 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.ConfigurationDb
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApiClaims");
+                "ApiClaims");
 
             migrationBuilder.DropTable(
-                name: "ApiScopeClaims");
+                "ApiScopeClaims");
 
             migrationBuilder.DropTable(
-                name: "ApiSecrets");
+                "ApiSecrets");
 
             migrationBuilder.DropTable(
-                name: "ClientClaims");
+                "ClientClaims");
 
             migrationBuilder.DropTable(
-                name: "ClientCorsOrigins");
+                "ClientCorsOrigins");
 
             migrationBuilder.DropTable(
-                name: "ClientGrantTypes");
+                "ClientGrantTypes");
 
             migrationBuilder.DropTable(
-                name: "ClientIdPRestrictions");
+                "ClientIdPRestrictions");
 
             migrationBuilder.DropTable(
-                name: "ClientPostLogoutRedirectUris");
+                "ClientPostLogoutRedirectUris");
 
             migrationBuilder.DropTable(
-                name: "ClientProperties");
+                "ClientProperties");
 
             migrationBuilder.DropTable(
-                name: "ClientRedirectUris");
+                "ClientRedirectUris");
 
             migrationBuilder.DropTable(
-                name: "ClientScopes");
+                "ClientScopes");
 
             migrationBuilder.DropTable(
-                name: "ClientSecrets");
+                "ClientSecrets");
 
             migrationBuilder.DropTable(
-                name: "IdentityClaims");
+                "IdentityClaims");
 
             migrationBuilder.DropTable(
-                name: "ApiScopes");
+                "ApiScopes");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                "Clients");
 
             migrationBuilder.DropTable(
-                name: "IdentityResources");
+                "IdentityResources");
 
             migrationBuilder.DropTable(
-                name: "ApiResources");
+                "ApiResources");
         }
     }
 }

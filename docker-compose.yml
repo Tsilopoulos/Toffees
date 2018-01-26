@@ -13,7 +13,7 @@ services:
       context: .
       dockerfile: Biometric/Source/Toffees.Glucose/Dockerfile
 
-
+  
   toffees.web:
     image: toffees.web
     build:

@@ -40,3 +40,10 @@ services:
     ports:
       - "80"
 
+
+  toffees.web:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+

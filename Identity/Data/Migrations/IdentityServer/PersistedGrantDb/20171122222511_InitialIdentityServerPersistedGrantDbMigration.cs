@@ -9,7 +9,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.PersistedGrantDb
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PersistedGrants",
+                "PersistedGrants",
                 columns: table => new
                 {
                     Key = table.Column<string>(maxLength: 200, nullable: false),
@@ -26,7 +26,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.PersistedGrantDb
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersistedGrants_SubjectId_ClientId_Type",
+                "IX_PersistedGrants_SubjectId_ClientId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "ClientId", "Type" });
         }
@@ -34,7 +34,7 @@ namespace Toffees.Identity.Data.Migrations.IdentityServer.PersistedGrantDb
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PersistedGrants");
+                "PersistedGrants");
         }
     }
 }
