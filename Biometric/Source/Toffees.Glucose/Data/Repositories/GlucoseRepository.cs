@@ -17,7 +17,7 @@ namespace Toffees.Glucose.Data.Repositories
             _ctx = glucosesContext;
         }
 
-        public async Task<List<Entities.Glucose>> GetAllGlucosesTask(string userId)
+        public async Task<List<Entities.Glucose>> GetAllGlucosesTaskAsync(string userId)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Toffees.Glucose.Data.Repositories
             }
         }
 
-        public async Task<List<Entities.Glucose>> GetGlucosesByDateTimeSpanTask(string userId, DateTime startDateTime, DateTime endDateTime)
+        public async Task<List<Entities.Glucose>> GetGlucosesByDateTimeSpanTaskAsync(string userId, DateTime startDateTime, DateTime endDateTime)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Toffees.Glucose.Data.Repositories
             }
         }
 
-        public async Task<Entities.Glucose> GetGlucosesByIdTask(int? glucoseId)
+        public async Task<Entities.Glucose> GetGlucosesByIdTaskAsync(int? glucoseId)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace Toffees.Glucose.Data.Repositories
             _ctx.Entry(glucose).State = EntityState.Modified;
         }
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
             try
             {

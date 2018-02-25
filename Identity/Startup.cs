@@ -1,6 +1,13 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using IdentityModel;
+using IdentityServer4;
+using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -23,12 +30,6 @@ namespace Toffees.Identity
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true);
-
-            //if (env.IsDevelopment())
-            //{
-            //    //For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-            //    builder.AddUserSecrets<ConfigurationBuilder>();
-            //}
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -58,9 +59,6 @@ namespace Toffees.Identity
                 .AddSigningCredential(new X509Certificate2(Path.Combine(Directory.GetCurrentDirectory(), "IdentityServer4Auth.pfx")))
                 .AddJwtBearerClientAuthentication()
                 .AddAspNetIdentity<ApplicationUser>()
-                //.AddInMemoryIdentityResources(Config.GetIdentityResources())
-                //.AddInMemoryApiResources(Config.GetApis())
-                //.AddInMemoryClients(Config.GetClients())
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = builder =>
@@ -105,13 +103,15 @@ namespace Toffees.Identity
             app.UseMvcWithDefaultRoute();
         }
 
-        //private void InitializeDatabase(IApplicationBuilder app)
-        //{
-        //    using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-        //    {
-                //erviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+        private static void InitializeDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
-                //var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                context.Clients.Add(Config.GetClients().First().ToEntity());
+                context.SaveChanges();
                 //context.Database.Migrate();
                 //if (!context.Clients.Any())
                 //{
@@ -139,7 +139,7 @@ namespace Toffees.Identity
                 //    }
                 //    context.SaveChanges();
                 //}
-        //    }
-        //}
+            }
+        }
     }
 }

@@ -18,19 +18,19 @@ namespace Toffees.Glucose
                 var startDateTime = Request.Query["startDateTime"];
                 if (startDateTime == null)
                 {
-                    var allBloodSamples = Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetAllGlucosesTask(userId));
+                    var allBloodSamples = Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetAllGlucosesTaskAsync(userId));
                     if (allBloodSamples == null || allBloodSamples.Count == 0)
                     {
                         return HttpStatusCode.NotFound;
                     }
                     return allBloodSamples;
                 }
-                var listOfBloodSamples = Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetGlucosesByDateTimeSpanTask(userId, DateTime.Parse(startDateTime), DateTime.Now.ToUniversalTime().AddHours(3)));
+                var listOfBloodSamples = Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetGlucosesByDateTimeSpanTaskAsync(userId, DateTime.Parse(startDateTime), DateTime.Now.ToUniversalTime().AddHours(3)));
                 if (listOfBloodSamples == null || listOfBloodSamples.Count == 0)
                 {
                     return HttpStatusCode.NotFound;
                 }
-                return Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetAllGlucosesTask(userId));
+                return Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetAllGlucosesTaskAsync(userId));
             });
 
             Post("/{userid}", async (parameters, _) =>
@@ -43,7 +43,7 @@ namespace Toffees.Glucose
                 var newGlucose = Mapper.Map<Data.Entities.Glucose>(glucoseDto);
                 newGlucose.UserId = parameters.userid;
                 glucosesRepository.InsertGlucose(newGlucose);
-                await glucosesRepository.Save();
+                await glucosesRepository.SaveAsync();
                 glucosesRepository.UpdateGlucose(newGlucose);
                 return HttpStatusCode.Created;
             });
@@ -54,7 +54,7 @@ namespace Toffees.Glucose
                 var newGlucose = Mapper.Map<Data.Entities.Glucose>(glucoseDto);
                 newGlucose.UserId = parameters.userid;
                 glucosesRepository.DeleteGlucose(newGlucose.Id);
-                await glucosesRepository.Save();
+                await glucosesRepository.SaveAsync();
                 return HttpStatusCode.OK;
             });
         }

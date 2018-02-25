@@ -22,22 +22,22 @@ namespace Toffees.Glucose
             _healthCheck = healthCheck;
         }
 
-        public Task Invoke(IDictionary<string, object> env)
+        public Task InvokeAsync(IDictionary<string, object> env)
         {
             var context = new OwinContext(env);
             return context.Request.Path.StartsWithSegments(MonitorPath)
-                ? HandleMonitorEndpoint(context) : _next(env);
+                ? HandleMonitorEndpointAsync(context) : _next(env);
         }
 
-        private Task HandleMonitorEndpoint(IOwinContext context)
+        private Task HandleMonitorEndpointAsync(IOwinContext context)
         {
             if (context.Request.Path.StartsWithSegments(MonitorShallowPath))
-                return ShallowEndpoint(context);
+                return ShallowEndpointAsync(context);
             return context.Request.Path.StartsWithSegments(MonitorDeepPath)
-                ? DeepEndpoint(context) : Task.FromResult(0);
+                ? DeepEndpointAsync(context) : Task.FromResult(0);
         }
 
-        private async Task DeepEndpoint(IOwinContext context)
+        private async Task DeepEndpointAsync(IOwinContext context)
         {
             if (await _healthCheck())
                 context.Response.StatusCode = 204;
@@ -45,7 +45,7 @@ namespace Toffees.Glucose
                 context.Response.StatusCode = 503;
         }
 
-        private Task ShallowEndpoint(IOwinContext context)
+        private static Task ShallowEndpointAsync(IOwinContext context)
         {
             context.Response.StatusCode = 204;
             return Task.FromResult(0);

@@ -1,0 +1,22 @@
+<h1>Glucoses Index</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<p *ngIf="!glucoses"><em>Loading...</em></p>
+
+<table class="table" *ngIf="glucoses">
+  <thead>
+    <tr>
+      <th>Blood Glucose (mg/dL)</th>
+      <th>When (ISO DateTime)</th>
+      <th>How (Before Meal, After Meal etc.)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let glucose of glucoses">
+      <td>{{ glucose.data }}</td>
+      <td>{{ glucose.pinchDateTime }}</td>
+      <td>{{ glucose.tag }}</td>
+    </tr>
+  </tbody>
+</table>

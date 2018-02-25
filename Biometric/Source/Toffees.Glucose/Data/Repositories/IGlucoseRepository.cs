@@ -8,11 +8,11 @@ namespace Toffees.Glucose.Data.Repositories
     {
         //Task<IList<IGlucose>> HealthCheckTask();
 
-        Task<List<Entities.Glucose>> GetAllGlucosesTask(string userId);
+        Task<List<Entities.Glucose>> GetAllGlucosesTaskAsync(string userId);
 
-        Task<List<Entities.Glucose>> GetGlucosesByDateTimeSpanTask(string userId, DateTime startingDateTime, DateTime endingDateTime);
+        Task<List<Entities.Glucose>> GetGlucosesByDateTimeSpanTaskAsync(string userId, DateTime startingDateTime, DateTime endingDateTime);
 
-        Task<Entities.Glucose> GetGlucosesByIdTask(int? glucoseId);
+        Task<Entities.Glucose> GetGlucosesByIdTaskAsync(int? glucoseId);
 
         void InsertGlucose(Entities.Glucose glucose);
 
@@ -22,7 +22,7 @@ namespace Toffees.Glucose.Data.Repositories
 
         void UpdateGlucose(Entities.Glucose glucose);
 
-        Task Save();
+        Task SaveAsync();
 
         void Dispose(bool disposing);
 

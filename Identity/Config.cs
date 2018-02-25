@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
@@ -12,7 +13,7 @@ namespace Toffees.Identity
             return new IdentityResource[]
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
+                new IdentityResources.Profile()
             };
         }
 
@@ -34,15 +35,16 @@ namespace Toffees.Identity
                     // include the following using claims in access token (in addition to subject id)
                     UserClaims =
                     {
-                        JwtClaimTypes.Name
+                        JwtClaimTypes.Name,
+                        JwtClaimTypes.Id
                     },
                     // this API defines two scopes
                     Scopes =
                     {
-                        new Scope()
+                        new Scope
                         {
                             Name = "biometric_api.full_access",
-                            DisplayName = "Full access to biometric API",
+                            DisplayName = "Full access to biometric API"
                         },
                         new Scope
                         {
@@ -58,13 +60,39 @@ namespace Toffees.Identity
         {
             return new[]
             {
+                // .NET Core API Gateway
+                new Client
+                {
+                    ClientId = "apiGateway",
+                    ClientName = ".NET Core API Gateway",
+                    ClientUri = "http://localhost:52633",
+                    ClientSecrets = new List<Secret>
+                    {
+                        new Secret("C309386B-ADFA-4A24-B693-2B211806204C".Sha256())
+                    },
+                    AllowedGrantTypes = new[] {GrantType.ResourceOwnerPassword},
+                    AllowedCorsOrigins =
+                    {
+                        "http://localhost:52633"
+                    },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile
+                    },
+                    AlwaysIncludeUserClaimsInIdToken = true
+                },
+
                 // SPA client using client credential flow
                 new Client
                 {
                     ClientId = "angular",
                     ClientName = "Angular SPA Client",
-                    ClientUri = "http://localhost:5002",
-                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    ClientUri = "http://localhost:4002",
+                    AllowedGrantTypes = {
+                        GrantType.Hybrid,
+                        GrantType.ClientCredentials,
+                    },
                     RequireConsent = false,
                     AllowAccessTokensViaBrowser = true,
                     ClientSecrets = new List<Secret>
@@ -73,15 +101,15 @@ namespace Toffees.Identity
                     },
                     RedirectUris =
                     {
-                        "http://localhost:5002/home"
+                        "http://localhost:4002/glucose"
                     },
                     PostLogoutRedirectUris =
                     {
-                        "http://localhost:5002"
+                        "http://localhost:4002/home"
                     },
                     AllowedCorsOrigins =
                     {
-                        "http://localhost:5002"
+                        "http://localhost:4002"
                     },
                     AllowedScopes =
                     {
@@ -89,7 +117,8 @@ namespace Toffees.Identity
                         IdentityServerConstants.StandardScopes.Profile,
                         "biometric_api.full_access"
                     },
-                    AllowOfflineAccess = true
+                    AllowOfflineAccess = true,
+                    AlwaysIncludeUserClaimsInIdToken = true
                 },
                 
                 // Postman API tool client
@@ -109,7 +138,7 @@ namespace Toffees.Identity
                         "biometric_api.full_access"
                     },
                     AllowOfflineAccess = true
-                },
+                }
             };
         }
     }
