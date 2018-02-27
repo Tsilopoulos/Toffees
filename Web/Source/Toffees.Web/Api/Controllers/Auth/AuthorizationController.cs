@@ -4,25 +4,26 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Toffees.Web.Api.Models;
+using Toffees.Web.Api.Models.Auth;
 using Toffees.Web.Api.Validators;
 
 namespace Toffees.Web.Api.Controllers.Auth
 {
+    [AllowAnonymous]
     [Produces("application/json")]
-    [Route("api/Authorization")]
+    [Route("api/[controller]")]
     [ValidateModel]
     public class AuthorizationController : Controller
     {
         [HttpPost, AllowAnonymous]
-        public async Task<IActionResult> PostTaskAsync()
+        public async Task<IActionResult> PostTaskAsync([FromBody]ClientAuthorizationCredentials model)
         {
             var formUrlEncodedContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("client_id", "angular"),
-                new KeyValuePair<string, string>("client_secret", "93A905DE-7760-4E00-AFC9-B421820F6B70"),
-                new KeyValuePair<string, string>("grant_type", "client_credentials"),
-                new KeyValuePair<string, string>("scope", "biometric_api.full_access")
+                new KeyValuePair<string, string>("client_id", model.ClientId),
+                new KeyValuePair<string, string>("client_secret", model.ClientSecret),
+                new KeyValuePair<string, string>("grant_type", model.GrantType),
+                new KeyValuePair<string, string>("scope", model.Scope[0])
             });
             using (var client = new HttpClient())
             {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Toffees.Web.Api.Models
+namespace Toffees.Web.Api.Models.Auth
 {
     public class IdentityServerJwtResponse
     {

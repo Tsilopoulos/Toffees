@@ -4,17 +4,12 @@ import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 import { AppModule } from "./app/app.module";
 import { environment } from "./environments/environment";
 
-export function getIdentityServerUrl() {
-  return "http://localhost:5000/";
-}
-
-export function getGlucoseMicroserviceUrl() {
-  return "http://localhost:5001/";
+export function getBaseUrl() {
+  return "http://localhost:52633/";
 }
 
 const providers = [
-  { provide: "GLUCOSE_URL", useFactory: getGlucoseMicroserviceUrl, deps: [] },
-  { provide: "IDENTITY_URL", useFactory: getIdentityServerUrl, deps: [] }
+  { provide: "BASE_URL", useFactory: getBaseUrl, deps: [] }
 ];
 
 if (environment.production) {

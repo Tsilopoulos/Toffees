@@ -8,7 +8,7 @@ import { HttpClient } from "@angular/common/http";
 export class GlucoseComponent {
   public glucoses: IGlucose[];
 
-  constructor(http: HttpClient, @Inject("GLUCOSE_URL") baseUrl: string) {
+  constructor(http: HttpClient, @Inject("BASE_URL") baseUrl: string) {
     http.get<IGlucose[]>(baseUrl + "api/biometric/glucose").subscribe(result => {
       this.glucoses = result;
     }, error => console.error(error));

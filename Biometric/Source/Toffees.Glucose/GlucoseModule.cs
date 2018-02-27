@@ -14,23 +14,37 @@ namespace Toffees.Glucose
         {
             Get("/{userid}", async parameters =>
             {
-                var userId = parameters.userid;
                 var startDateTime = Request.Query["startDateTime"];
                 if (startDateTime == null)
                 {
-                    var allBloodSamples = Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetAllGlucosesTaskAsync(userId));
+                    var allBloodSamples = Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetAllGlucosesTaskAsync(parameters.userid));
                     if (allBloodSamples == null || allBloodSamples.Count == 0)
                     {
-                        return HttpStatusCode.NotFound;
+                        return HttpStatusCode.NoContent;
                     }
                     return allBloodSamples;
                 }
-                var listOfBloodSamples = Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetGlucosesByDateTimeSpanTaskAsync(userId, DateTime.Parse(startDateTime), DateTime.Now.ToUniversalTime().AddHours(3)));
+                var listOfBloodSamples = Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetGlucosesByDateTimeSpanTaskAsync(parameters.userid, DateTime.Parse(startDateTime), DateTime.Now.ToUniversalTime().AddHours(3)));
                 if (listOfBloodSamples == null || listOfBloodSamples.Count == 0)
                 {
-                    return HttpStatusCode.NotFound;
+                    return HttpStatusCode.NoContent;
                 }
-                return Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetAllGlucosesTaskAsync(userId));
+                return Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetAllGlucosesTaskAsync(parameters.userid));
+            });
+
+            Get("/{userid}/{gid}", async parameters =>
+            {
+                try
+                {
+                    var glucose = await glucosesRepository.GetGlucosesByIdTaskAsync(int.Parse(parameters.gid));
+                    return Mapper.Map<GlucoseDto>(glucose);
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+
+                return HttpStatusCode.NoContent;
             });
 
             Post("/{userid}", async (parameters, _) =>
@@ -48,12 +62,10 @@ namespace Toffees.Glucose
                 return HttpStatusCode.Created;
             });
 
-            Delete("/{userid}", async (parameters, _) =>
+            Delete("/{userid}/{gid}", async parameters =>
             {
-                var glucoseDto = this.Bind<GlucoseDto>();
-                var newGlucose = Mapper.Map<Data.Entities.Glucose>(glucoseDto);
-                newGlucose.UserId = parameters.userid;
-                glucosesRepository.DeleteGlucose(newGlucose.Id);
+                var glucose = await glucosesRepository.GetGlucosesByIdTaskAsync(int.Parse(parameters.gid)).ConfigureAwait(false);
+                glucosesRepository.DeleteGlucose(glucose.Id);
                 await glucosesRepository.SaveAsync();
                 return HttpStatusCode.OK;
             });
