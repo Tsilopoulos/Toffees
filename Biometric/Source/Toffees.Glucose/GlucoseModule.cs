@@ -15,7 +15,7 @@ namespace Toffees.Glucose
             Get("/{userid}", async parameters =>
             {
                 var startDateTime = Request.Query["startDateTime"];
-                if (startDateTime == null)
+                if (startDateTime.Value == null)
                 {
                     var allBloodSamples = Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetAllGlucosesTaskAsync(parameters.userid));
                     if (allBloodSamples == null || allBloodSamples.Count == 0)
@@ -30,21 +30,6 @@ namespace Toffees.Glucose
                     return HttpStatusCode.NoContent;
                 }
                 return Mapper.Map<List<GlucoseDto>>(await glucosesRepository.GetAllGlucosesTaskAsync(parameters.userid));
-            });
-
-            Get("/{userid}/{gid}", async parameters =>
-            {
-                try
-                {
-                    var glucose = await glucosesRepository.GetGlucosesByIdTaskAsync(int.Parse(parameters.gid));
-                    return Mapper.Map<GlucoseDto>(glucose);
-                }
-                catch (Exception ex)
-                {
-                    
-                }
-
-                return HttpStatusCode.NoContent;
             });
 
             Post("/{userid}", async (parameters, _) =>
