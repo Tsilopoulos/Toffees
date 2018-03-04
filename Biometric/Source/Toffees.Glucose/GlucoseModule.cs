@@ -47,7 +47,7 @@ namespace Toffees.Glucose
                 return newGlucose;
             });
 
-            Delete("/{userid}/{gid}", async parameters =>
+            Delete("/{gid}", async parameters =>
             {
                 var glucose = await glucosesRepository.GetGlucosesByIdTaskAsync(int.Parse(parameters.gid)).ConfigureAwait(false);
                 glucosesRepository.DeleteGlucose(glucose.Id);

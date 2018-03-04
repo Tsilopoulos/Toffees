@@ -32,8 +32,8 @@ namespace Toffees.Web.Api.Controllers.Glucose
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromRoute]string userId, [FromBody]GlucosePostRequest model)
+        [HttpPost("{userId}")]
+        public async Task<IActionResult> Post(string userId, [FromBody]GlucosePostRequest model)
         {
             var accessToken = Request.Headers["Authorization"].ToString().Substring(7, Request.Headers["Authorization"].ToString().Length - 7);
             var newGlucoseDto = new GlucoseDto
@@ -42,10 +42,11 @@ namespace Toffees.Web.Api.Controllers.Glucose
                 PinchDateTime = DateTime.Now,
                 Tag = model.Tag
             };
-            var payload = new StringContent(JsonConvert.SerializeObject(newGlucoseDto), Encoding.UTF8);
+            var payload = new StringContent(JsonConvert.SerializeObject(newGlucoseDto), Encoding.UTF8, "application/json");
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
                 var result = await client.PostAsync($"http://localhost:5001/api/biometric/glucose/{userId}", payload).ConfigureAwait(false);
                 if (!result.IsSuccessStatusCode) return Unauthorized();
                 return Created("POST:/api/biometric/glucose", 
