@@ -19,7 +19,8 @@
       "prefix": "app",
       "styles": [
         "styles.css",
-        "../node_modules/bootstrap/dist/css/bootstrap.min.css"
+        "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "../src/assets/fontawesome-free-5.0.8/web-fonts-with-css/css/fontawesome-all.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

@@ -36,7 +36,10 @@ namespace Toffees.Web.Api.Controllers.Auth
                     await result.Content.ReadAsStringAsync().ConfigureAwait(false));
                 var handler = new JwtSecurityTokenHandler();
                 var token = handler.ReadJwtToken(identityServerTokenEndpointResponse.AccessToken);
-                return Content(token.Subject);
+                return new JsonResult(new UserAuthenticationResponse
+                {
+                    UserId = token.Subject
+                });
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace Toffees.Web.Api.Controllers.Glucose
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetAll(string userId, [FromQuery]string dateTimeRange = null)
         {
-            var accessToken = Request.Headers["Authorization"].ToString();
+            var accessToken = Request.Headers["Authorization"].ToString().Substring(7, Request.Headers["Authorization"].ToString().Length - 7);
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
@@ -32,23 +33,30 @@ namespace Toffees.Web.Api.Controllers.Glucose
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromRoute]string userId, [FromBody]GlucoseDto model)
+        public async Task<IActionResult> Post([FromRoute]string userId, [FromBody]GlucosePostRequest model)
         {
-            var accessToken = Request.Headers["Authorization"].ToString();
-            var payload = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8);
+            var accessToken = Request.Headers["Authorization"].ToString().Substring(7, Request.Headers["Authorization"].ToString().Length - 7);
+            var newGlucoseDto = new GlucoseDto
+            {
+                Data = model.Data,
+                PinchDateTime = DateTime.Now,
+                Tag = model.Tag
+            };
+            var payload = new StringContent(JsonConvert.SerializeObject(newGlucoseDto), Encoding.UTF8);
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
                 var result = await client.PostAsync($"http://localhost:5001/api/biometric/glucose/{userId}", payload).ConfigureAwait(false);
                 if (!result.IsSuccessStatusCode) return Unauthorized();
-                return Content(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+                return Created("POST:/api/biometric/glucose", 
+                    JsonConvert.DeserializeObject<GlucoseDto>(await result.Content.ReadAsStringAsync().ConfigureAwait(false)));
             }
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete([FromRoute]int glucoseId)
         {
-            var accessToken = Request.Headers["Authorization"].ToString();
+            var accessToken = Request.Headers["Authorization"].ToString().Substring(7, Request.Headers["Authorization"].ToString().Length - 7);
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");

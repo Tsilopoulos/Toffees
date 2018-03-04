@@ -17,6 +17,11 @@ li.link-active a:focus {
     left: 0;
     right: 0;
     z-index: 1;
+    background-color: #444444
+}
+
+.navbar-nav {
+  flex-direction: column;
 }
 
 @media (min-width: 768px) {

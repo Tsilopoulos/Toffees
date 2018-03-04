@@ -1,22 +1,59 @@
 <h1>Glucoses Index</h1>
-
 <p>This component demonstrates fetching data from the server.</p>
-
 <p *ngIf="!glucoses"><em>Loading...</em></p>
-
+<button class="btn btn-lg btn-outline-primary" style="margin-bottom: 20px;" (click)="create(content)">Create</button>
 <table class="table" *ngIf="glucoses">
   <thead>
     <tr>
-      <th>Blood Glucose (mg/dL)</th>
-      <th>When (ISO DateTime)</th>
+      <th>Blood Glucose</th>
+      <th class="text-center">When</th>
       <th>How (Before Meal, After Meal etc.)</th>
+      <th class="text-center">Actions</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let glucose of glucoses">
-      <td>{{ glucose.data }}</td>
-      <td>{{ glucose.pinchDateTime }}</td>
-      <td>{{ glucose.tag }}</td>
+      <td>{{ glucose.data }} mg/dL</td>
+      <td>{{ glucose.pinchDateTime | date:'short'}}</td>
+      <td class="text-center">{{ glucose.tag }}</td>
+      <td>
+        <div class="row">
+          <div class="col-md-6">
+            <button type="button" title="Delete" class="btn" style="background-color: transparent" aria-label="Delete" (click)="delete(glucose.id)">
+              <i class="far fa-trash-alt"></i>
+            </button>
+          </div>
+          <div class="col-md-6">
+            <button type="button" title="Edit" class="btn" style="background-color: transparent" aria-label="Edit" (click)="edit(glucose.id)">
+              <i class="far fa-edit"></i>
+            </button>  
+          </div>
+        </div>
+      </td>
     </tr>
   </tbody>
 </table>
+<ng-template #content let-c="close" let-d="dismiss">
+  <form [formGroup]="form" (ngSubmit)="upload()" novalidate>
+    <div class="modal-header">
+      <h4 class="modal-title">Upload your latest Blood Glucose sample</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-label-group">
+        <input formControlName="reading" id="reading" type="number" class="form-control form-control-lg" placeholder="Reading" required autofocus>
+        <label for="reading">Blood Glucose</label>
+      </div>
+      <div class="form-label-group">
+        <input formControlName="tag" id="tag" type="text" class="form-control form-control-lg" placeholder="How" required>
+        <label for="tag">Tag</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success">Upload</button>
+      <button type="button" class="btn btn-warning" (click)="c('Close click')">Close</button>
+    </div>
+  </form>
+</ng-template>

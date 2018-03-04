@@ -31,7 +31,7 @@ namespace Toffees.Web.Api.Controllers.Auth
                 if (!result.IsSuccessStatusCode) return Unauthorized();
                 var identityServerTokenEndpointResponse = JsonConvert.DeserializeObject<IdentityServerJwtResponse>(
                     await result.Content.ReadAsStringAsync().ConfigureAwait(false));
-                return Content(identityServerTokenEndpointResponse.AccessToken);
+                return new JsonResult(identityServerTokenEndpointResponse);
             }
         }
     }

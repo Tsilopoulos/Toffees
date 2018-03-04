@@ -1,8 +1,13 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+
+import { AuthHttpInterceptor } from "./auth/auth.interceptor";
+import { AuthenticationService } from "./auth/authentication.service";
+import { GlucoseService } from "./glucose/glucose.service";
 
 import { AppComponent } from "./app.component";
 import { NavMenuComponent } from "./nav-menu/nav-menu.component";
@@ -24,6 +29,8 @@ import { LoginComponent } from "./login/login.component";
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
+    NgbModule.forRoot(),
     RouterModule.forRoot([
       { path: "", component: HomeComponent, pathMatch: "full" },
       { path: "glucose", component: GlucoseComponent },
@@ -31,7 +38,8 @@ import { LoginComponent } from "./login/login.component";
       { path: "register", component: RegisterComponent }
     ])
   ],
-  providers: [],
+  providers: [AuthenticationService, GlucoseService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

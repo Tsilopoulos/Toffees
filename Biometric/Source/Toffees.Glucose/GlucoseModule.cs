@@ -44,7 +44,7 @@ namespace Toffees.Glucose
                 glucosesRepository.InsertGlucose(newGlucose);
                 await glucosesRepository.SaveAsync();
                 glucosesRepository.UpdateGlucose(newGlucose);
-                return HttpStatusCode.Created;
+                return newGlucose;
             });
 
             Delete("/{userid}/{gid}", async parameters =>

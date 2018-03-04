@@ -4,13 +4,13 @@ namespace Toffees.Web.Api.Models.Auth
 {
     public class ClientAuthorizationCredentials
     {
-        [JsonProperty("client_id")]
+        [JsonProperty("clientId")]
         public string ClientId { get; set; }
 
-        [JsonProperty("client_secret")]
+        [JsonProperty("clientSecret")]
         public string ClientSecret { get; set; }
 
-        [JsonProperty("grant_type")]
+        [JsonProperty("grantType")]
         public string GrantType { get; set; }
 
         [JsonProperty("scope")]
