@@ -8,6 +8,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AuthHttpInterceptor } from "./auth/auth.interceptor";
 import { AuthenticationService } from "./auth/authentication.service";
 import { GlucoseService } from "./glucose/glucose.service";
+import { ConfirmationDialogService } from "./confirmation-dialog/confirmation-dialog.service";
 
 import { AppComponent } from "./app.component";
 import { NavMenuComponent } from "./nav-menu/nav-menu.component";
@@ -15,6 +16,7 @@ import { HomeComponent } from "./home/home.component";
 import { GlucoseComponent } from "./glucose/glucose.component";
 import { RegisterComponent } from "./register/register.component";
 import { LoginComponent } from "./login/login.component";
+import { ConfirmationDialogComponent } from "./confirmation-dialog/confirmation-dialog.component";
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { LoginComponent } from "./login/login.component";
     HomeComponent,
     GlucoseComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -38,8 +41,9 @@ import { LoginComponent } from "./login/login.component";
       { path: "register", component: RegisterComponent }
     ])
   ],
-  providers: [AuthenticationService, GlucoseService,
+  providers: [AuthenticationService, GlucoseService, ConfirmationDialogService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ ConfirmationDialogComponent ]
 })
 export class AppModule { }

@@ -1,5 +1,4 @@
 <h1>Glucoses Index</h1>
-<p>This component demonstrates fetching data from the server.</p>
 <p *ngIf="!glucoses"><em>Loading...</em></p>
 <button class="btn btn-lg btn-outline-primary" style="margin-bottom: 20px;" (click)="create(content)">Create</button>
 <table class="table" *ngIf="glucoses">
@@ -19,7 +18,7 @@
       <td>
         <div class="row">
           <div class="col-md-6">
-            <button type="button" title="Delete" class="btn" style="background-color: transparent" aria-label="Delete" (click)="delete(glucose.id)">
+            <button type="button" title="Delete" class="btn" style="background-color: transparent" aria-label="Delete" (click)="openConfirmationDialog()">
               <i class="far fa-trash-alt"></i>
             </button>
           </div>

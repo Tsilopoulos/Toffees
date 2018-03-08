@@ -1,14 +1,13 @@
 import { Injectable, Inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { IGlucose, Glucose } from "../glucose/glucose.component";
-import "rxjs/Rx";
 
 @Injectable()
 export class GlucoseService {
 
   apiGatewayUrl: string;
 
-  constructor(private readonly httpClient: HttpClient, @Inject("API_GATEWAY_URL") apiGatewayUrl: string) { 
+  constructor(private readonly httpClient: HttpClient, @Inject("API_GATEWAY_URL") apiGatewayUrl: string) {
     this.apiGatewayUrl = apiGatewayUrl;
   }
 
@@ -21,7 +20,7 @@ export class GlucoseService {
           // We probably don't have to do something here
         }
       } catch (e) {
-        //TODO add error handling
+        // TODO add error handling
       }
     }, error => console.error(error));
   }
@@ -39,7 +38,7 @@ export class GlucoseService {
             // We probably don't have to do something here either
           }
         } catch (e) {
-          //TODO add error handling
+          // TODO add error handling
         }
       }, error => console.error(error));
   }

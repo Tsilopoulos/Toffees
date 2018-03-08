@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NgbModal, NgbModalRef, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import { GlucoseService } from "./glucose.service";
+import { ConfirmationDialogService } from "../confirmation-dialog/confirmation-dialog.service";
 
 @Component({
   selector: "app-fetch-data",
@@ -18,6 +19,7 @@ export class GlucoseComponent implements OnInit {
   private modalRef: NgbModalRef;
 
   constructor(public formBuilder: FormBuilder,
+    private readonly confirmationDialogService: ConfirmationDialogService,
     private readonly modalService: NgbModal,
     private readonly glucoseService: GlucoseService,
     private readonly http: HttpClient,
@@ -26,6 +28,12 @@ export class GlucoseComponent implements OnInit {
         this.glucoses = result;
       }, error => console.error(error));
       this.apiGatewayUrl = apiGatewayUrl;
+  }
+
+  public openConfirmationDialog() {
+    this.confirmationDialogService.confirm("Please confirm..", "Do you really want to ... ?")
+    .then((confirmed) => console.log("User confirmed:", confirmed))
+    .catch(() => console.log("User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)"));
   }
 
   ngOnInit(): void {
@@ -69,7 +77,7 @@ export class GlucoseComponent implements OnInit {
     if (this.form.valid) {
       this.glucoseService.post(bg).subscribe((newBg: IGlucose) => {
         this.glucoses.push(newBg);
-        this.modalRef.close();       
+        this.modalRef.close();
       });
     } else {
       // ?!
