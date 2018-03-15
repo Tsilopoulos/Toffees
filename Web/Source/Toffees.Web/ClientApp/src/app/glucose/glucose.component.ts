@@ -16,6 +16,8 @@ export class GlucoseComponent implements OnInit {
   closeResult: string;
   apiGatewayUrl: string;
   form: FormGroup;
+  glucoseToBeEdited: IGlucose;
+  index: number;
   private modalRef: NgbModalRef;
 
   constructor(public formBuilder: FormBuilder,
@@ -30,12 +32,6 @@ export class GlucoseComponent implements OnInit {
       this.apiGatewayUrl = apiGatewayUrl;
   }
 
-  public openConfirmationDialog() {
-    this.confirmationDialogService.confirm("Please confirm..", "Do you really want to ... ?")
-    .then((confirmed) => console.log("User confirmed:", confirmed))
-    .catch(() => console.log("User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)"));
-  }
-
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       reading: [null, Validators.required],
@@ -43,36 +39,7 @@ export class GlucoseComponent implements OnInit {
     });
   }
 
-  create(content) {
-    this.modalRef = this.modalService.open(content);
-    this.modalRef.result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  edit() {
-
-  }
-
-  delete(bg: IGlucose) {
-    this.modalRef = this.modalService.open(bg);
-    this.modalRef.result.then((result) => {
-      this.glucoseService.delete(bg.id).subscribe(() => {
-        const index = this.glucoses.indexOf(bg);
-        if (index !== -1) {
-          this.glucoses.splice(index, 1);
-        }
-        this.modalRef.close();
-      });
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  upload() {
+  post() {
     const bg = new Glucose(this.form.value.reading, this.form.value.tag);
     if (this.form.valid) {
       this.glucoseService.post(bg).subscribe((newBg: IGlucose) => {
@@ -82,6 +49,57 @@ export class GlucoseComponent implements OnInit {
     } else {
       // ?!
     }
+  }
+
+  edit() {
+    const oldBg = new Glucose(this.form.value.reading, this.form.value.tag);
+    oldBg.id = this.glucoseToBeEdited.id;
+    oldBg.pinchDateTime = this.glucoseToBeEdited.pinchDateTime;
+    if (this.form.valid) {
+      this.glucoseService.put(oldBg).subscribe((updatedBg: IGlucose) => {
+        this.glucoses[this.index] = updatedBg;
+        this.modalRef.close();
+      });
+    } else {
+      // ?!
+    }
+  }
+
+  delete(bg: IGlucose) {
+    this.confirmationDialogService.confirm("Please Confirm", "Do you really want to delete this Blood Glucose entry?", "Delete", "Cancel")
+    .then((confirmed) =>
+      this.glucoseService.delete(bg.id).subscribe(() => {
+        const index = this.glucoses.indexOf(bg);
+        if (index !== -1) {
+          this.glucoses.splice(index, 1);
+        }
+      })
+    )
+    .catch((reason) => this.closeResult = `Dismissed ${this.getDismissReason(reason)}`);
+  }
+
+  private createModal(content: any) {
+    this.modalRef = this.modalService.open(content);
+    this.modalRef.result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private editModal(content: any, glucose: IGlucose, index: number) {
+    this.form = this.formBuilder.group({
+      reading: [glucose.data, Validators.required],
+      tag: [glucose.tag, Validators.required]
+    });
+    this.glucoseToBeEdited = glucose;
+    this.index = index;
+    this.modalRef = this.modalService.open(content);
+    this.modalRef.result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 
   private getDismissReason(reason: any): string {

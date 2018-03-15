@@ -25,8 +25,18 @@ export class GlucoseService {
     }, error => console.error(error));
   }
 
-  patch(bg: Glucose) {
-
+  put(bg: Glucose) {
+    return this.httpClient
+    .put(this.apiGatewayUrl + `api/glucose/${localStorage.getItem("userId")}`, bg)
+    .do((response: IGlucose) => {
+      try {
+        if (response) {
+          // We probably don't have to do something here
+        }
+      } catch (e) {
+        // TODO add error handling
+      }
+    }, error => console.error(error));
   }
 
   delete(bgId: number) {

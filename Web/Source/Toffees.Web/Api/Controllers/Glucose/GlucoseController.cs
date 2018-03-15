@@ -18,7 +18,7 @@ namespace Toffees.Web.Api.Controllers.Glucose
     public class GlucoseController : Controller
     {
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetAll(string userId, [FromQuery]string dateTimeRange = null)
+        public async Task<IActionResult> Get(string userId, [FromQuery]string dateTimeRange = null)
         {
             var accessToken = Request.Headers["Authorization"].ToString().Substring(7, Request.Headers["Authorization"].ToString().Length - 7);
             using (var client = new HttpClient())
@@ -54,13 +54,36 @@ namespace Toffees.Web.Api.Controllers.Glucose
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromRoute]int glucoseId)
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> Put(string userId, [FromBody]GlucoseDto model)
+        {
+            var accessToken = Request.Headers["Authorization"].ToString().Substring(7, Request.Headers["Authorization"].ToString().Length - 7);
+            var newGlucoseDto = new GlucoseDto
+            {
+                Id = model.Id,
+                Data = model.Data,
+                PinchDateTime = DateTime.Now,
+                Tag = model.Tag
+            };
+            var payload = new StringContent(JsonConvert.SerializeObject(newGlucoseDto), Encoding.UTF8, "application/json");
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                var result = await client.PutAsync($"http://localhost:5001/api/biometric/glucose/{userId}", payload).ConfigureAwait(false);
+                if (!result.IsSuccessStatusCode) return Unauthorized();
+                return Ok(JsonConvert.DeserializeObject<GlucoseDto>(await result.Content.ReadAsStringAsync().ConfigureAwait(false)));
+            }
+        }
+
+        [HttpDelete("{glucoseId}")]
+        public async Task<IActionResult> Delete(int glucoseId)
         {
             var accessToken = Request.Headers["Authorization"].ToString().Substring(7, Request.Headers["Authorization"].ToString().Length - 7);
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
                 var result = await client.DeleteAsync($"http://localhost:5001/api/biometric/glucose/{glucoseId}").ConfigureAwait(false);
                 if (!result.IsSuccessStatusCode) return Unauthorized();
                 return Ok();

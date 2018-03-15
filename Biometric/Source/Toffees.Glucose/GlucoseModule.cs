@@ -42,16 +42,30 @@ namespace Toffees.Glucose
                 var newGlucose = Mapper.Map<Data.Entities.Glucose>(glucoseDto);
                 newGlucose.UserId = parameters.userid;
                 glucosesRepository.InsertGlucose(newGlucose);
-                await glucosesRepository.SaveAsync();
-                glucosesRepository.UpdateGlucose(newGlucose);
+                await glucosesRepository.SaveAsync().ConfigureAwait(false);
                 return newGlucose;
+            });
+
+            Put("/{userId}", async (parameters, _) => 
+            {
+                var glucoseDto = this.BindAndValidate<GlucoseDto>();
+                if (!ModelValidationResult.IsValid)
+                {
+                    return Negotiate.WithModel(ModelValidationResult).WithStatusCode(HttpStatusCode.BadRequest);
+                }
+                var glucose = await glucosesRepository.GetGlucosesByIdTaskAsync(glucoseDto.Id).ConfigureAwait(false);
+                glucose.Tag = glucoseDto.Tag;
+                glucose.Data = glucoseDto.Data;
+                glucosesRepository.UpdateGlucose(glucose);
+                await glucosesRepository.SaveAsync().ConfigureAwait(false);
+                return Mapper.Map<GlucoseDto>(glucose);
             });
 
             Delete("/{gid}", async parameters =>
             {
                 var glucose = await glucosesRepository.GetGlucosesByIdTaskAsync(int.Parse(parameters.gid)).ConfigureAwait(false);
                 glucosesRepository.DeleteGlucose(glucose.Id);
-                await glucosesRepository.SaveAsync();
+                await glucosesRepository.SaveAsync().ConfigureAwait(false);
                 return HttpStatusCode.OK;
             });
         }
