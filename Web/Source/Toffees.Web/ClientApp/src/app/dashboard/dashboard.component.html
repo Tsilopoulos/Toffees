@@ -1,3 +1,20 @@
-<p>
-  dashboard works!
-</p>
+<div *ngIf = "dataLoaded">
+  <ngx-charts-line-chart
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="series"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [autoScale]="autoScale"
+      [showRefLines]="showRefLines"
+      [showRefLabels]="showRefLabels"
+      [referenceLines]="referenceLines"
+      (select)="onSelect($event)">
+  </ngx-charts-line-chart>
+</div>
