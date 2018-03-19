@@ -3,6 +3,7 @@ import { NgIf } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { GlucoseService } from "../glucose/glucose.service";
 import { IGlucose } from "../glucose/glucose.component";
+import * as d3 from "d3-shape";
 
 @Component({
   selector: "app-dashboard",
@@ -11,17 +12,17 @@ import { IGlucose } from "../glucose/glucose.component";
 })
 export class DashboardComponent {
 
-  series: any[];
   dataLoaded: boolean;
+  series: any[];
+  multi: any[];
   view: any[] = [700, 400];
-
-  // ngx-charts options
+  curve = d3.curveNatural;
   showXAxis = true;
   showYAxis = true;
   gradient = false;
   showLegend = true;
   showXAxisLabel = true;
-  xAxisLabel = "";
+  xAxisLabel = "Time";
   showYAxisLabel = true;
   yAxisLabel = "mg/dL";
   timeline = true;
@@ -42,23 +43,43 @@ export class DashboardComponent {
     @Inject("API_GATEWAY_URL") apiGatewayUrl: string) {
       this.dataLoaded = false;
       http.get<IGlucose[]>(apiGatewayUrl + `api/glucose/${localStorage.getItem("userId")}`).subscribe(result => {
-        const series = [{ "name": "BG", "series": this.transform(result) }];
-        Object.assign(this, { series });
+        const series = [{ "name": "BG", "series": this.transformToD3DataSeries(result) }];
+        const multi = this.separateReferenceDataSeries(result);
+        Object.assign(this, { series, multi });
         this.dataLoaded = true;
       }, error => console.error(error));
-  }
-
-  transform(glucoses: IGlucose[]): Object[] {
-    const series = [];
-    glucoses.forEach(function (glucose) {
-      const bgDataPoint = { "name": glucose.pinchDateTime, "value": glucose.data };
-      series.push(bgDataPoint);
-    });
-    return series;
   }
 
   onSelect(event) {
     console.log(event);
   }
 
+  private transformToD3DataSeries(glucoses: IGlucose[]): Object[] {
+    const series = [];
+    glucoses.forEach(function (glucose) {
+      const bgDataPoint = { "name": new Date(glucose.pinchDateTime), "value": glucose.data };
+      series.push(bgDataPoint);
+    });
+    return series;
+  }
+
+  private separateReferenceDataSeries(glucoses: IGlucose[]): Object[] {
+    let lowCount = 0;
+    let normalCount = 0;
+    let highCount = 0;
+    glucoses.forEach(function (glucose) {
+      if (glucose.data < 80) {
+        lowCount++;
+      } else if (glucose.data < 180) {
+        normalCount++;
+      } else {
+        highCount++;
+      }
+    });
+    return [
+      { "name": "Normal", "value": normalCount },
+      { "name": "Low", "value": lowCount },
+      { "name": "High", "value": highCount }
+    ];
+  }
 }
