@@ -1,37 +1,32 @@
-<div class="main-nav">
-  <div class="navbar navbar-inverse">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" [attr.aria-expanded]="isExpanded" (click)="toggle()">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-    <div class="clearfix"></div>
-    <div class="navbar-collapse collapse" [ngClass]='{ "in": isExpanded }'>
-      <ul class="nav navbar-nav ml-auto">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+  <div class="container">
+    <a href="#" class="navbar-brand">Toffees</a>
+    <button class="navbar-toggler" (click)="toggleNavbar()" type="button" aria-controls="theNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div [ngbCollapse]="isNavbarCollapsed" id="theNavbar" [@collapse]="isNavbarCollapsedAnim" class="navbar-collapse collapse navbar-toggleable">
+      <ul class="navbar-nav mr-auto ml-auto">
         <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]="{ exact: true }">
-          <a [routerLink]='["/"]' (click)="collapse()">
-            <span class="glyphicon glyphicon-home"></span> Home
+          <a [routerLink]='["/"]' (click)="collapse()" class="nav-item active">
+            <i class="fas fa-home"></i>&nbsp;Home&nbsp;&nbsp;&nbsp;
           </a>
         </li>
-        <li [routerLinkActive]='["link-active"]'>
+                <li [routerLinkActive]='["link-active"]' class="nav-item">
           <a [routerLink]='["/login"]' (click)="collapse()">
-            <span class="glyphicon glyphicon-log-in"></span> Login
+            <i class="fas fa-sign-in-alt"></i>&nbsp;Login&nbsp;&nbsp;&nbsp;
           </a>
         </li>
-        <li [routerLinkActive]='["link-active"]'>
+        <li [routerLinkActive]='["link-active"]' class="nav-item">
           <a [routerLink]='["/glucose"]' (click)="collapse()">
-            <span class="glyphicon glyphicon-th-list"></span> Blood Glucose Index
+            <i class="fas fa-list-ul"></i>&nbsp;Blood Glucose Index&nbsp;&nbsp;&nbsp;
           </a>
         </li>
-        <li [routerLinkActive]='["link-active"]'>
+        <li [routerLinkActive]='["link-active"]' class="nav-item">
           <a [routerLink]='["/dashboard"]' (click)="collapse()">
-            <span class="glyphicon glyphicon-dashboard"></span> Dashboard
+            <i class="fas fa-tachometer-alt"></i>&nbsp;Dashboard
           </a>
         </li>
       </ul>
     </div>
   </div>
-</div>
+</nav>

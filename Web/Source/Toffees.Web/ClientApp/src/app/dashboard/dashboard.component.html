@@ -1,4 +1,6 @@
 <div *ngIf = "dataLoaded">
+  <h2>Dashboard</h2>
+  <h3>Blood Glucose trend over time</h3>
   <ngx-charts-line-chart
       [view]="view"
       [scheme]="colorScheme"
@@ -19,7 +21,6 @@
       [timeline]="timeline"
       (select)="onSelect($event)">
   </ngx-charts-line-chart>
-
   <ngx-charts-pie-grid
       [view]="view"
       [scheme]="colorScheme"
