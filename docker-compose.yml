@@ -11,12 +11,12 @@ services:
     image: toffees.glucose
     build:
       context: .
-      dockerfile: Biometric/Source/Toffees.Glucose/Dockerfile
+      dockerfile: Biometric/Dockerfile
 
   
   toffees.web:
     image: toffees.web
     build:
       context: .
-      dockerfile: Web/Source/Toffees.Web/Dockerfile
+      dockerfile: Web/Dockerfile
 

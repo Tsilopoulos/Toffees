@@ -5,19 +5,9 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{DE5EB76C-DF4E-4464-8121-5E63CF30A3BE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{4D59EB0E-16E1-4B6B-B9D0-4D214003ACFE}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{F2055E6D-F825-45EB-8335-1B882D7804E6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Biometric", "Biometric", "{BEDE5519-7F11-4E2D-ADD0-BDFA45537603}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{6BDD5C03-F409-466E-AF00-0228293B7C24}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{C7D14E39-EF1B-4AEE-A6DB-A79168FEAF97}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toffees.Glucose.Tests", "Biometric\Test\Toffees.Glucose.Tests\Toffees.Glucose.Tests.csproj", "{63D85B8F-E387-486E-AECA-B822E73F7B99}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toffees.Glucose", "Biometric\Source\Toffees.Glucose\Toffees.Glucose.csproj", "{86F7FA29-FD49-4AD4-B290-589E76AF027D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toffees.Glucose", "Biometric\Toffees.Glucose.csproj", "{86F7FA29-FD49-4AD4-B290-589E76AF027D}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{3CE18CDA-461A-47AB-9791-198444D35864}"
 EndProject
@@ -25,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{A1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toffees.Identity", "Identity\Toffees.Identity.csproj", "{419E0C51-3362-4FF9-8469-ED2D2936FF37}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toffees.Web", "Web\Source\Toffees.Web\Toffees.Web.csproj", "{8550ECC9-C946-4857-A620-A8CC82FFE0BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toffees.Web", "Web\Toffees.Web.csproj", "{8550ECC9-C946-4857-A620-A8CC82FFE0BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

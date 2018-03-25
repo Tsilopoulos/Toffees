@@ -60,8 +60,8 @@ namespace Toffees.Web
 
                 if (env.IsDevelopment())
                 {
-                    //spa.UseAngularCliServer("start");
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                    spa.UseAngularCliServer("start");
+                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
         }
