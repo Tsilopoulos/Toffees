@@ -5,10 +5,10 @@ EXPOSE 52633
 FROM microsoft/aspnetcore-build:2.0 AS build
 WORKDIR /src
 COPY *.sln ./
-COPY Web/Source/Toffees.Web/Toffees.Web.csproj Web/Source/Toffees.Web/
+COPY Web/Toffees.Web.csproj Web/
 RUN dotnet restore
 COPY . .
-WORKDIR /src/Web/Source/Toffees.Web
+WORKDIR /src/Web
 RUN dotnet build -c Release -o /app
 
 FROM build AS publish

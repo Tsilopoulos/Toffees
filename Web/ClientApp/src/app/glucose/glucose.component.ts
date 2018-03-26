@@ -78,7 +78,7 @@ export class GlucoseComponent implements OnInit {
     .catch((reason) => this.closeResult = `Dismissed ${this.getDismissReason(reason)}`);
   }
 
-  private createModal(content: any) {
+  createModal(content: any) {
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

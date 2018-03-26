@@ -5,45 +5,14 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "80"
+      - "5001"
   toffees.identity:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "80"
-
-
-  toffees.glucose:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
-
-
-  toffees.identity:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
-
-
-  toffees.glucose:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
-
-
+      - "5000"
   toffees.web:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "80"
-
-
-  toffees.web:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
-
+      - "52633"
