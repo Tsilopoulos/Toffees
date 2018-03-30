@@ -1,30 +1,50 @@
-<div *ngIf = "dataLoaded">
-  <h2>Dashboard</h2>
-  <h3>Blood Glucose trend over time</h3>
-  <ngx-charts-line-chart
-      [view]="view"
-      [scheme]="colorScheme"
-      [results]="series"
-      [curve]="curve"
-      [gradient]="gradient"
-      [xAxis]="showXAxis"
-      [yAxis]="showYAxis"
-      [legend]="showLegend"
-      [showXAxisLabel]="showXAxisLabel"
-      [showYAxisLabel]="showYAxisLabel"
-      [xAxisLabel]="xAxisLabel"
-      [yAxisLabel]="yAxisLabel"
-      [autoScale]="autoScale"
-      [showRefLines]="showRefLines"
-      [showRefLabels]="showRefLabels"
-      [referenceLines]="referenceLines"
-      [timeline]="timeline"
-      (select)="onSelect($event)">
-  </ngx-charts-line-chart>
-  <ngx-charts-pie-grid
+<div class="row" *ngIf = "dataLoaded">
+  <div class="col-lg-6 col-md-6 col-xs-12">
+    <h3 class="text-center">Trends</h3>
+    <ngx-charts-line-chart
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="series"
+        [curve]="curve"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [autoScale]="autoScale"
+        [showRefLines]="showRefLines"
+        [showRefLabels]="showRefLabels"
+        [referenceLines]="referenceLines"
+        [timeline]="timeline"
+        (select)="onSelect($event)">
+    </ngx-charts-line-chart>
+  </div>
+  <div class="col-lg-6 col-md-6 col-xs-12">
+    <h3 class="text-center">Goals</h3>
+    <ngx-charts-bubble-chart
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="boo"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [minRadius]="3"
+        [maxRadius]="3"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [autoScale]="autoScale"
+        (select)="onSelect($event)">
+    </ngx-charts-bubble-chart>
+    <!-- <ngx-charts-pie-grid
       [view]="view"
       [scheme]="colorScheme"
       [results]="multi"
       (select)="onSelect($event)">
-    </ngx-charts-pie-grid>
+    </ngx-charts-pie-grid> -->
+  </div>
 </div>

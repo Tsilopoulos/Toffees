@@ -5,8 +5,8 @@
   <thead>
     <tr>
       <th>Blood Glucose</th>
-      <th class="text-center">When</th>
-      <th>How (Before Meal, After Meal etc.)</th>
+      <th>When</th>
+      <th class="text-center">How</th>
       <th class="text-center">Actions</th>
     </tr>
   </thead>
@@ -17,12 +17,12 @@
       <td class="text-center">{{ glucose.tag }}</td>
       <td>
         <div class="row">
-          <div class="col-md-6">
+          <div class="text-center col-lg-6 col-md-6 col-xs-12">
             <button type="button" title="Delete" class="btn" style="background-color: transparent" aria-label="Delete" (click)="delete(glucose)">
               <i class="far fa-trash-alt"></i>
             </button>
           </div>
-          <div class="col-md-6">
+          <div class="text-center col-lg-6 col-md-6 col-xs-12">
             <button type="button" title="Edit" class="btn" style="background-color: transparent" aria-label="Edit" (click)="editModal(editContent, glucose, i)">
               <i class="far fa-edit"></i>
             </button>  
@@ -42,11 +42,11 @@
     </div>
     <div class="modal-body">
       <div class="form-label-group">
-        <input formControlName="reading" id="reading" type="number" class="form-control form-control-lg" placeholder="Reading" required autofocus>
+        <input formControlName="reading" id="reading" type="number" class="form-control form-control-lg" style="height: 50px" placeholder="Reading" required autofocus>
         <label for="reading">Blood Glucose</label>
       </div>
       <div class="form-label-group">
-        <input formControlName="tag" id="tag" type="text" class="form-control form-control-lg" placeholder="How" required>
+        <input formControlName="tag" id="tag" type="text" class="form-control form-control-lg" style="height: 50px" placeholder="How" required>
         <label for="tag">Tag</label>
       </div>
     </div>
@@ -66,11 +66,11 @@
     </div>
     <div class="modal-body">
       <div class="form-label-group">
-        <input formControlName="reading" id="reading" type="number" class="form-control form-control-lg" required autofocus>
+        <input formControlName="reading" id="reading" type="number" class="form-control form-control-lg" style="height: 50px" required autofocus>
         <label for="reading">Blood Glucose</label>
       </div>
       <div class="form-label-group">
-        <input formControlName="tag" id="tag" type="text" class="form-control form-control-lg" required>
+        <input formControlName="tag" id="tag" type="text" class="form-control form-control-lg" style="height: 50px" required>
         <label for="tag">Tag</label>
       </div>
     </div>

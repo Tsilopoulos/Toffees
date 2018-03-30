@@ -6,23 +6,23 @@
     </button>
     <div [ngbCollapse]="isNavbarCollapsed" id="theNavbar" [@collapse]="isNavbarCollapsedAnim" class="navbar-collapse collapse navbar-toggleable">
       <ul class="navbar-nav mr-auto ml-auto">
-        <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]="{ exact: true }">
-          <a [routerLink]='["/"]' class="nav-item active">
+        <li class="nav-item" [routerLinkActive]='["active"]' [routerLinkActiveOptions]="{exact: true}">
+          <a class="nav-link" [routerLink]='["/"]'>
             <i class="fas fa-home"></i>&nbsp;Home&nbsp;&nbsp;&nbsp;
           </a>
         </li>
-        <li [routerLinkActive]='["link-active"]' class="nav-item">
-          <a [routerLink]='["/login"]'>
+        <li class="nav-item" [routerLinkActive]='["active"]'>
+          <a class="nav-link" [routerLink]='["/login"]'>
             <i class="fas fa-sign-in-alt"></i>&nbsp;Login&nbsp;&nbsp;&nbsp;
           </a>
         </li>
-        <li [routerLinkActive]='["link-active"]' class="nav-item">
-          <a [routerLink]='["/glucose"]'>
+        <li class="nav-item" [routerLinkActive]='["active"]'>
+          <a class="nav-link" [routerLink]='["/glucose"]'>
             <i class="fas fa-list-ul"></i>&nbsp;Blood Glucose Index&nbsp;&nbsp;&nbsp;
           </a>
         </li>
-        <li [routerLinkActive]='["link-active"]' class="nav-item">
-          <a [routerLink]='["/dashboard"]'>
+        <li class="nav-item" [routerLinkActive]='["active"]'>
+          <a class="nav-link" [routerLink]='["/dashboard"]'>
             <i class="fas fa-tachometer-alt"></i>&nbsp;Dashboard
           </a>
         </li>
