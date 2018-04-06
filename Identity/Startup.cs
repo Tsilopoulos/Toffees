@@ -1,11 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
-using IdentityModel;
-using IdentityServer4;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
@@ -110,35 +106,33 @@ namespace Toffees.Identity
                 serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
                 var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-                context.Clients.Add(Config.GetClients().First().ToEntity());
-                context.SaveChanges();
-                //context.Database.Migrate();
-                //if (!context.Clients.Any())
-                //{
-                //    foreach (var client in Config.GetClients())
-                //    {
-                //        context.Clients.Add(client.ToEntity());
-                //    }
-                //    context.SaveChanges();
-                //}
+                context.Database.Migrate();
+                if (!context.Clients.Any())
+                {
+                    foreach (var client in Config.GetClients())
+                    {
+                        context.Clients.Add(client.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
 
-                //if (!context.IdentityResources.Any())
-                //{
-                //    foreach (var resource in Config.GetIdentityResources())
-                //    {
-                //        context.IdentityResources.Add(resource.ToEntity());
-                //    }
-                //    context.SaveChanges();
-                //}
+                if (!context.IdentityResources.Any())
+                {
+                    foreach (var resource in Config.GetIdentityResources())
+                    {
+                        context.IdentityResources.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
 
-                //if (context.ApiResources.Any()) return;
-                //{
-                //    foreach (var resource in Config.GetApis())
-                //    {
-                //        context.ApiResources.Add(resource.ToEntity());
-                //    }
-                //    context.SaveChanges();
-                //}
+                if (context.ApiResources.Any()) return;
+                {
+                    foreach (var resource in Config.GetApis())
+                    {
+                        context.ApiResources.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
             }
         }
     }

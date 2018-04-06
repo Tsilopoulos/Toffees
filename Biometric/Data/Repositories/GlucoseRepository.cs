@@ -130,7 +130,7 @@ namespace Toffees.Glucose.Data.Repositories
             {
                 await _ctx.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException dbUpdateEx)
+            catch (Exception dbUpdateEx)
             {
                 throw dbUpdateEx;
             }

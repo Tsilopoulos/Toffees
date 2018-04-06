@@ -1,20 +1,11 @@
-FROM microsoft/aspnetcore:2.0 AS base
-WORKDIR /app
-EXPOSE 5000
-
 FROM microsoft/aspnetcore-build:2.0 AS build
 WORKDIR /src
-COPY *.sln ./
-COPY Identity/Toffees.Identity.csproj Identity/
-RUN dotnet restore
 COPY . .
-WORKDIR /src/Identity
-RUN dotnet build -c Release -o /app
-
-FROM build AS publish
-RUN dotnet publish -c Release -o /app
-
-FROM base AS final
+COPY IdentityServer4Auth.cer IdentityServer4Auth.cer
+COPY IdentityServer4Auth.pfx IdentityServer4Auth.pfx
+COPY IdentityServer4Auth.pvk IdentityServer4Auth.pvk
+RUN dotnet publish --output /output --configuration Release
+FROM microsoft/aspnetcore:2.0.0
+COPY --from=build /output /app
 WORKDIR /app
-COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Toffees.Identity.dll"]
+ENTRYPOINT [ "dotnet", "Toffees.Identity.dll" ]

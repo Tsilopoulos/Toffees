@@ -4,6 +4,7 @@ using System.Security.Claims;
 using IdentityModel;
 using IdentityServer4;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Toffees.Identity.Data;
 using Toffees.Identity.Models;
@@ -18,7 +19,7 @@ namespace Toffees.Identity
             {
                 using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
-                    //context.Database.Migrate();
+                    context.Database.Migrate();
 
                     var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                     var alice = userMgr.FindByNameAsync("alice").Result;
